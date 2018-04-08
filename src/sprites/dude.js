@@ -10,6 +10,7 @@ export default class Dude extends Phaser.GameObjects.Sprite {
         this.createAnimations();
 
         this.cursors = config.input;
+        this.scene.physics.add.collider(this, config.scene.layer);
     }
 
     update(keys, time, delta) {
