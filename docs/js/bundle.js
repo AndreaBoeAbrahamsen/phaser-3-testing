@@ -93869,6 +93869,7 @@ var Dude = function (_Phaser$GameObjects$S) {
         _this.createAnimations();
 
         _this.cursors = config.input;
+        _this.scene.physics.add.collider(_this, config.scene.layer);
         return _this;
     }
 
@@ -147073,6 +147074,14 @@ var _dude = __webpack_require__(531);
 
 var _dude2 = _interopRequireDefault(_dude);
 
+var _bombs = __webpack_require__(1350);
+
+var _bombs2 = _interopRequireDefault(_bombs);
+
+var _stars = __webpack_require__(1351);
+
+var _stars2 = _interopRequireDefault(_stars);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -147107,14 +147116,6 @@ var PresentationScene = function (_Phaser$Scene) {
     }, {
         key: 'create',
         value: function create() {
-            /*const centerX = width / 2;
-            const centerY = height / 2;
-            const welcomeMessage = `Welcome to Phaser ${pkg.version}`;
-              this.add.image(centerX, centerY * 1.2, 'study');
-              this.add
-                .text(centerX, centerY * 0.8, welcomeMessage, { font: "bold 19px Arial", fill: "#fff" })
-                .setOrigin(0.5, 0.5);*/
-
             this.add.tileSprite(400, 304, 800, 608, 'background');
 
             this.map = this.make.tilemap({ key: 'map' });
@@ -147125,6 +147126,7 @@ var PresentationScene = function (_Phaser$Scene) {
             this.map.setCollision([1, 2, 3, 4, 5, 6, 7, 18, 19, 20, 21, 22, 23, 24, 35, 36, 37, 38, 39, 40, 41, 52, 53, 54, 55, 56, 57, 58, 64, 65]);
 
             this.score = 0;
+            this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
 
             this.player = new _dude2.default({
                 scene: this,
@@ -147134,31 +147136,17 @@ var PresentationScene = function (_Phaser$Scene) {
                 input: this.input.keyboard.createCursorKeys()
             });
 
-            this.physics.add.collider(this.player, this.layer);
-
-            this.stars = this.physics.add.group({
-                key: 'bigStar',
-                repeat: 11,
-                setXY: { x: 12, y: 0, stepX: 70 }
+            this.stars = new _stars2.default({
+                world: this.physics.world,
+                scene: this
             });
-            this.stars.children.iterate(function (child) {
-                child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+            this.bombs = new _bombs2.default({
+                world: this.physics.world,
+                scene: this
             });
-            this.physics.add.collider(this.stars, this.layer);
-            this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
 
-            this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
-
-            this.bombs = this.physics.add.group();
-            this.physics.add.collider(this.bombs, this.layer);
-            this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
-
-            var debugGraphics = this.add.graphics();
-            this.map.renderDebug(debugGraphics, {
-                tileColor: null, // Non-colliding tiles
-                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles
-                faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
-            });
+            this.showDebugging();
         }
     }, {
         key: 'update',
@@ -147166,37 +147154,14 @@ var PresentationScene = function (_Phaser$Scene) {
             this.player.update();
         }
     }, {
-        key: 'collectStar',
-        value: function collectStar(player, star) {
-            star.disableBody(true, true);
-
-            this.score += 10;
-            this.scoreText.setText('Score: ' + this.score);
-
-            if (this.stars.countActive(true) === 0) {
-                this.stars.children.iterate(function (child) {
-                    child.enableBody(true, child.x, 0, true, true);
-                });
-
-                var x = this.player.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-                var bomb = this.bombs.create(x, 16, 'bomb');
-                bomb.setBounce(1);
-                bomb.setCollideWorldBounds(true);
-                bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-                bomb.allowGravity = false;
-            }
-        }
-    }, {
-        key: 'hitBomb',
-        value: function hitBomb(player, bomb) {
-            this.physics.pause();
-
-            this.player.setTint(0xff0000);
-
-            this.player.anims.play('turn');
-
-            this.gameOver = true;
+        key: 'showDebugging',
+        value: function showDebugging() {
+            var debugGraphics = this.add.graphics();
+            this.map.renderDebug(debugGraphics, {
+                tileColor: null, // Non-colliding tiles
+                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles
+                faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Colliding face edges
+            });
         }
     }]);
 
@@ -147204,6 +147169,139 @@ var PresentationScene = function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.default = PresentationScene;
+
+/***/ }),
+/* 1350 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Bombs = function (_Phaser$Physics$Arcad) {
+    _inherits(Bombs, _Phaser$Physics$Arcad);
+
+    function Bombs(config) {
+        _classCallCheck(this, Bombs);
+
+        var _this = _possibleConstructorReturn(this, (Bombs.__proto__ || Object.getPrototypeOf(Bombs)).call(this, config.world, config.scene));
+
+        _this.scene.physics.add.collider(_this, config.scene.layer);
+        _this.scene.physics.add.collider(_this.scene.player, _this, _this.hitBomb, null, _this);
+
+        _this.createBomb();
+        return _this;
+    }
+
+    _createClass(Bombs, [{
+        key: 'update',
+        value: function update(keys, time, delta) {}
+    }, {
+        key: 'createBomb',
+        value: function createBomb() {
+            var x = this.scene.player.x < 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+            var bomb = this.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            bomb.allowGravity = false;
+            bomb.setTint(0x0000ff);
+        }
+    }, {
+        key: 'hitBomb',
+        value: function hitBomb(player, bomb) {
+            this.scene.physics.pause();
+
+            this.scene.player.setTint(0xff0000);
+
+            this.scene.player.anims.play('turn');
+
+            this.scene.gameOver = true;
+        }
+    }]);
+
+    return Bombs;
+}(Phaser.Physics.Arcade.Group);
+
+exports.default = Bombs;
+
+/***/ }),
+/* 1351 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Stars = function (_Phaser$Physics$Arcad) {
+    _inherits(Stars, _Phaser$Physics$Arcad);
+
+    function Stars(config) {
+        _classCallCheck(this, Stars);
+
+        var _this = _possibleConstructorReturn(this, (Stars.__proto__ || Object.getPrototypeOf(Stars)).call(this, config.world, config.scene, {
+            key: 'bigStar',
+            repeat: 11,
+            setXY: { x: 12, y: 0, stepX: 70 }
+        }));
+
+        _this.children.iterate(function (child) {
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        });
+
+        _this.scene.physics.add.collider(_this, config.scene.layer);
+        _this.scene.physics.add.collider(_this.scene.player, _this, _this.collectStar, null, _this);
+        return _this;
+    }
+
+    _createClass(Stars, [{
+        key: 'update',
+        value: function update(keys, time, delta) {}
+    }, {
+        key: 'collectStar',
+        value: function collectStar(player, star) {
+            star.disableBody(true, true);
+
+            this.scene.score += 10;
+            this.scene.scoreText.setText('Score: ' + this.scene.score);
+
+            if (this.countActive(true) === 0) {
+                this.children.iterate(function (child) {
+                    child.enableBody(true, child.x, 0, true, true);
+                });
+
+                this.scene.bombs.createBomb();
+            }
+        }
+    }]);
+
+    return Stars;
+}(Phaser.Physics.Arcade.Group);
+
+exports.default = Stars;
 
 /***/ })
 ],[532]);
