@@ -1,10 +1,8 @@
 import 'phaser';
 
-import pkg from '../node_modules/phaser/package.json';
-import Dude from './sprites/dude';
+import BootScene from './BootScene';
+import TitleScene from './TitleScene';
 import PresentationScene from './PresentationScene';
-
-// This is the entry point of your game.
 
 const width = 800;
 const height = 608;
@@ -19,7 +17,11 @@ var config = {
       gravity: { y: 200 }
     }
   },
-  scene: [PresentationScene],
+  scene: [
+    BootScene, 
+    TitleScene,
+    PresentationScene
+  ],
   pixelArt: true
 };
 

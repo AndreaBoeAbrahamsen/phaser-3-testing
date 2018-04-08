@@ -6,6 +6,9 @@ export default class Dude extends Phaser.GameObjects.Sprite {
         this.body.setBounce(0.2);
         this.body.setCollideWorldBounds(true);
         this.body.setGravityY(300);
+
+        this.body.setSize(27, 40);
+        this.body.offset.set(2, 7);  
       
         this.createAnimations();
 
