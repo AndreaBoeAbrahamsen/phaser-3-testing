@@ -7,8 +7,11 @@ class BootScene extends Phaser.Scene {
 
     preload()
     {
-        this.load.image('study', 'assets/img/study.png');
-        this.load.tilemapTiledJSON('map', 'assets/level1-5.json');
+        this.load.image('sky', 'assets/img/space.png');
+        this.load.image('logo', 'assets/img/phaser3-logo.png');
+        this.load.image('red', 'assets/img/red-particle.png');
+        //this.load.tilemapTiledJSON('map', 'assets/level1-5.json');
+        this.load.tilemapTiledJSON('map', 'assets/level1-stars.json');
         this.load.image('ground', 'assets/img/tiles-1.png');
         this.load.image('background', 'assets/img/background.png');
         this.load.image('star', 'assets/img/star.png');

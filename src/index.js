@@ -3,6 +3,7 @@ import 'phaser';
 import BootScene from './BootScene';
 import TitleScene from './TitleScene';
 import PresentationScene from './PresentationScene';
+import ObjectScene from './ObjectScene';
 
 const width = 800;
 const height = 608;
@@ -20,7 +21,8 @@ var config = {
   scene: [
     BootScene, 
     TitleScene,
-    PresentationScene
+    PresentationScene,
+    ObjectScene
   ],
   pixelArt: true
 };

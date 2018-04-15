@@ -17,27 +17,20 @@ export default class Dude extends Phaser.GameObjects.Sprite {
     }
 
     update(keys, time, delta) {
-        if (this.cursors.left.isDown)
-        {
+        if (this.cursors.left.isDown) {
             this.body.setVelocityX(-160);
-      
             this.anims.play('left', true);
         }
-        else if (this.cursors.right.isDown)
-        {
+        else if (this.cursors.right.isDown){
             this.body.setVelocityX(160);
-      
             this.anims.play('right', true);
         }
-        else
-        {
+        else{
             this.body.setVelocityX(0);
-      
             this.anims.play('turn');
         }
       
-        if (this.cursors.up.isDown && this.body.onFloor())
-        {
+        if (this.cursors.up.isDown && this.body.onFloor()){
             this.body.setVelocityY(-430);
         }
     }

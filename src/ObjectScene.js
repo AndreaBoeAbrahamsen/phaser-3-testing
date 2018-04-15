@@ -1,11 +1,11 @@
 import Dude from './sprites/dude';
 import Bombs from './other/bombs';
-import Stars from './other/stars';
+import Stars from './other/starsFromMap';
 
 class PresentationScene extends Phaser.Scene {
     constructor() {
       super({
-        key: 'PresentationScene'
+        key: 'ObjectScene'
       });
     }
 

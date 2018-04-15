@@ -8,7 +8,19 @@ export default class Bombs extends Phaser.Physics.Arcade.Group {
     }
 
     update(keys, time, delta) {
-
+        var children = this.getChildren();
+        for (var i = 0; i < children.length; i++)
+        {
+            var length = Math.abs(this.scene.player.body.x - children[i].body.x);
+            if(length > 400){
+                var playerPastBomb = this.scene.player.body.x > children[i].body.x;
+                if((playerPastBomb && children[i].body.velocity.x < 0) ||
+                  (!playerPastBomb && children[i].body.velocity.x > 0)){
+                    var x = children[i].body.velocity.x;
+                    children[i].body.setVelocityX(-x);
+                } 
+            }
+        }
     }
 
     createBomb() {
@@ -25,11 +37,8 @@ export default class Bombs extends Phaser.Physics.Arcade.Group {
     hitBomb (player, bomb)
     {
         this.scene.physics.pause();
-
         this.scene.player.setTint(0xff0000);
-
         this.scene.player.anims.play('turn');
-
         this.scene.gameOver = true;
     }
 }
