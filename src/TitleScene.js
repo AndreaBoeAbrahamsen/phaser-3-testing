@@ -45,6 +45,7 @@ class TitleScene extends Phaser.Scene {
         
         this.xKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
         this.cKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+        this.vKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
     }
 
     update()
@@ -53,6 +54,8 @@ class TitleScene extends Phaser.Scene {
             this.scene.start('PresentationScene');
         } else if(this.cKey.isDown){
             this.scene.start('ObjectScene');
+        }else if(this.vKey.isDown){
+            this.scene.start('EnemyScene');
         }
     }
 }

@@ -4,6 +4,7 @@ import BootScene from './BootScene';
 import TitleScene from './TitleScene';
 import PresentationScene from './PresentationScene';
 import ObjectScene from './ObjectScene';
+import EnemyScene from './EnemyScene';
 
 const width = 800;
 const height = 608;
@@ -22,7 +23,8 @@ var config = {
     BootScene, 
     TitleScene,
     PresentationScene,
-    ObjectScene
+    ObjectScene,
+    EnemyScene
   ],
   pixelArt: true
 };
