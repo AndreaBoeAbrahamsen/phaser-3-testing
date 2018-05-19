@@ -31,7 +31,7 @@ export default class Bombs extends Phaser.Physics.Arcade.Group {
         bomb.setCollideWorldBounds(true);
         bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
         bomb.allowGravity = false;
-        bomb.setTint(0x0000ff);
+        //bomb.setTint(0x0000ff);
     }
 
     hitBomb (player, bomb)

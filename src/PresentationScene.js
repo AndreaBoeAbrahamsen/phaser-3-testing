@@ -50,6 +50,11 @@ class PresentationScene extends Phaser.Scene {
     {
         this.player.update();
         //this.bombs.update();
+
+        if(this.gameOver){
+            this.gameOver = false;
+            this.scene.start('PresentationScene');
+        }
     }
 
     showDebugging ()
