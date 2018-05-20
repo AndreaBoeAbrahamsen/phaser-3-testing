@@ -36,9 +36,6 @@ export default class Bombs extends Phaser.Physics.Arcade.Group {
 
     hitBomb (player, bomb)
     {
-        this.scene.physics.pause();
-        this.scene.player.setTint(0xff0000);
-        this.scene.player.anims.play('turn');
-        this.scene.gameOver = true;
+        this.scene.events.emit('playerHit');
     }
 }

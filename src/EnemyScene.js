@@ -20,6 +20,21 @@ class EnemyScene extends Phaser.Scene {
             52, 53, 54, 55, 56, 57, 58, 64, 65 ]);
         //this.showDebugging();
 
+        /*
+, 
+                {
+                 "gid":69,
+                 "height":32,
+                 "id":3,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31,
+                 "x":224,
+                 "y":144
+                }
+        */
         this.enemyGroup = this.add.group();
         this.map.getObjectLayer("Droids").objects.forEach(
             (enemy) => {

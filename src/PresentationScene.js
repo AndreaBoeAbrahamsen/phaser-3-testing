@@ -40,6 +40,8 @@ class PresentationScene extends Phaser.Scene {
             scene: this
         });
 
+        this.events.on('playerHit', this.gameOver, this);
+
         this.bombs = new Bombs({
             world: this.physics.world,
             scene: this
@@ -51,13 +53,21 @@ class PresentationScene extends Phaser.Scene {
         this.player.update();
         //this.bombs.update();
 
-        if(this.gameOver){
-            this.gameOver = false;
+        if(this.isGameOver){
+            this.isGameOver = false;
             this.scene.start('PresentationScene');
         }
     }
 
-    showDebugging ()
+    gameOver()
+    {
+        this.physics.pause();
+        this.player.setTint(0xff0000);
+        this.player.anims.play('turn');
+        this.isGameOver = true;
+    }
+
+    showDebugging()
     {
         var debugGraphics = this.add.graphics();
         this.map.renderDebug(debugGraphics, {

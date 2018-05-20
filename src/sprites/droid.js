@@ -12,9 +12,12 @@ export default class Droid extends Phaser.GameObjects.Sprite {
       
         this.createAnimations();
 
+        this.isAJumper = true;
+        this.collideMethod = this.isAJumper ? this.onTileOverlapJump : this.onTileOverlapTurn;
+
         this.cursors = config.input;
-        this.scene.physics.add.collider(this, config.scene.layer, this.onTileOverlapJump); //, this.onTileOverlap
-        //this.scene.physics.add.overlap(this, config.scene.layer, this.onTileOverlap, this.processOverlap);
+        this.scene.physics.add.collider(this, config.scene.layer, this.onTileOverlapbyIndex); //, this.onTileOverlapTurn
+        //this.scene.physics.add.overlap(this, config.scene.layer, this.onTileOverlapbyIndex, this.processOverlap);
         //config.scene.layer.setTileIndexCallback([1,7,8,9], this.onTileOverlapbyIndex, config.scene);
 
         this.anims.play('droidLeft', true);
@@ -22,9 +25,10 @@ export default class Droid extends Phaser.GameObjects.Sprite {
         this.shouldTurn = false;
         this.shouldJump = false;
         this.direction = -1;
-        this.speed = 100;
+        this.speed = 50;
 
         this.body.setVelocityX(this.speed * this.direction);
+        this.body.debugShowBody = true;
     }
 
     update(keys, time, delta) {
@@ -50,49 +54,48 @@ export default class Droid extends Phaser.GameObjects.Sprite {
         this.body.setVelocityX( this.speed *  this.direction);
     }
 
-    onTileOverlap(robot, tile) {
+    onTileOverlapTurn(robot, tile) {
         if (robot.body.velocity.x > 0) {
-            var stuff = tile.tilemapLayer.getTileAtWorldXY(
-                robot.x + robot.width/2 + 1,
-                robot.y + robot.height/2 + 1
-            )
-            if(stuff == null){
+            var isGround = tile.tilemapLayer.hasTileAtWorldXY(
+                robot.x + robot.width/2 + tile.width/2,
+                robot.y + robot.height/2 + tile.width/2
+            );
+            if(!isGround){
                 robot.shouldTurn = true;
             }
         } 
         else if (robot.body.velocity.x < 0) {
-            var stuff = tile.tilemapLayer.getTileAtWorldXY(
-                robot.x - robot.width/2 - 1,
-                robot.y + robot.height/2 + 1
-            )
-            if(stuff == null){
+            var isGround = tile.tilemapLayer.hasTileAtWorldXY(
+                robot.x - robot.width/2 - tile.width/2,
+                robot.y + robot.height/2 + tile.width/2
+            );
+            if(!isGround){
                 robot.shouldTurn = true;
             }
         }
       }
 
       onTileOverlapJump(robot, tile) {
-        if(robot.body.onFloor()){
+        if(robot.body.onFloor() && !(robot.body.blocked.left || robot.body.blocked.right)){
             if (robot.flipX) {
-                var stuff = tile.tilemapLayer.getTileAtWorldXY(
-                    robot.x + robot.width/2 + 3,
-                    robot.y + robot.height/2 + 3
-                )
-                if(stuff == null){
+                var isGround = tile.tilemapLayer.hasTileAtWorldXY(
+                    robot.x + robot.width/2 + tile.width/2,
+                    robot.y + robot.height/2 + tile.width/2
+                );
+                if(!isGround){
                     robot.shouldJump = true;
-                }
+                } 
             } 
             else if (!robot.flipX) {
-                var stuff = tile.tilemapLayer.getTileAtWorldXY(
-                    robot.x - robot.width/2 - 3,
-                    robot.y + robot.height/2 + 3
-                )
-                if(stuff == null){
+                var isGround = tile.tilemapLayer.hasTileAtWorldXY(
+                    robot.x - robot.width/2 - tile.width/2,
+                    robot.y + robot.height/2 + tile.width/2
+                );
+                if(!isGround){
                     robot.shouldJump = true;
-                }
+                } 
             }
         }
-        
       }
 
       processOverlap(robot, tile) {
@@ -105,9 +108,22 @@ export default class Droid extends Phaser.GameObjects.Sprite {
       }
 
       onTileOverlapbyIndex(robot, tile) {
-        var index = tile.index;
+        if (!tile) return;
+
+        /*
         if ((index == 7 || index == 9) && robot.body.velocity.x > 0) {
             if(robot.x > tile.pixelX){
+                robot.shouldJump = true;
+            }
+        } 
+        */
+
+        var index = tile.index;
+        if (robot.body.velocity.x > 0) {
+            var bTile = tile.tilemapLayer.getTileAt(tile.x + 1, tile.y);
+            if (!bTile) return;
+            var bIndex = bTile.index;
+            if(bIndex == 7 || bIndex == 9){
                 robot.shouldTurn = true;
             }
         } 
