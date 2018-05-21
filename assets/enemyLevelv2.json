@@ -16,18 +16,18 @@
          "draworder":"topdown",
          "name":"Droids",
          "objects":[
-                {
-                 "gid":69,
-                 "height":32,
-                 "id":2,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":31,
-                 "x":736,
-                 "y":368
-                }, 
+            {
+                "gid":69,
+                "height":32,
+                "id":2,
+                "name":"",
+                "rotation":0,
+                "type":"",
+                "visible":true,
+                "width":31,
+                "x":736,
+                "y":368
+               },
                 {
                  "gid":69,
                  "height":32,

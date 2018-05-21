@@ -15,17 +15,19 @@ export default class Droid extends Phaser.GameObjects.Sprite {
         this.isAJumper = true;
         this.collideMethod = this.isAJumper ? this.onTileOverlapJump : this.onTileOverlapTurn;
 
+        this.edgeFear = 10; //ToDo
+
         this.cursors = config.input;
-        this.scene.physics.add.collider(this, config.scene.layer, this.onTileOverlapbyIndex); //, this.onTileOverlapTurn
-        //this.scene.physics.add.overlap(this, config.scene.layer, this.onTileOverlapbyIndex, this.processOverlap);
-        //config.scene.layer.setTileIndexCallback([1,7,8,9], this.onTileOverlapbyIndex, config.scene);
+        this.scene.physics.add.collider(this, config.scene.layer, this.onTileOverlapJump); //, this.onTileOverlapTurn
+        //this.scene.physics.add.overlap(this, config.scene.layer, this.onTileOverlapByIndex, this.processOverlap);
+        //config.scene.layer.setTileIndexCallback([1,7,8,9], this.onTileOverlapByIndex, config.scene);
 
         this.anims.play('droidLeft', true);
 
         this.shouldTurn = false;
         this.shouldJump = false;
         this.direction = -1;
-        this.speed = 50;
+        this.speed = 100;
 
         this.body.setVelocityX(this.speed * this.direction);
         this.body.debugShowBody = true;
@@ -78,20 +80,26 @@ export default class Droid extends Phaser.GameObjects.Sprite {
       onTileOverlapJump(robot, tile) {
         if(robot.body.onFloor() && !(robot.body.blocked.left || robot.body.blocked.right)){
             if (robot.flipX) {
-                var isGround = tile.tilemapLayer.hasTileAtWorldXY(
+                var ground = tile.tilemapLayer.getTilesWithinWorldXY(
                     robot.x + robot.width/2 + tile.width/2,
-                    robot.y + robot.height/2 + tile.width/2
+                    robot.y,
+                    1, 
+                    tile.height * 2,
+                    {isNotEmpty: true}
                 );
-                if(!isGround){
+                if(ground.length == 0){
                     robot.shouldJump = true;
                 } 
             } 
             else if (!robot.flipX) {
-                var isGround = tile.tilemapLayer.hasTileAtWorldXY(
+                var ground = tile.tilemapLayer.getTilesWithinWorldXY(
                     robot.x - robot.width/2 - tile.width/2,
-                    robot.y + robot.height/2 + tile.width/2
+                    robot.y,
+                    1, 
+                    tile.height * 2,
+                    {isNotEmpty: true}
                 );
-                if(!isGround){
+                if(ground.length == 0){
                     robot.shouldJump = true;
                 } 
             }
@@ -107,23 +115,17 @@ export default class Droid extends Phaser.GameObjects.Sprite {
         }
       }
 
-      onTileOverlapbyIndex(robot, tile) {
+      onTileOverlapByIndex(robot, tile) {
         if (!tile) return;
-
-        /*
-        if ((index == 7 || index == 9) && robot.body.velocity.x > 0) {
-            if(robot.x > tile.pixelX){
-                robot.shouldJump = true;
-            }
-        } 
-        */
 
         var index = tile.index;
         if (robot.body.velocity.x > 0) {
             var bTile = tile.tilemapLayer.getTileAt(tile.x + 1, tile.y);
             if (!bTile) return;
             var bIndex = bTile.index;
-            if(bIndex == 7 || bIndex == 9){
+            var robotRightEgde = robot.x + robot.width/2;
+            var tileRightEdge = bTile.pixelX + bTile.width;
+            if((bIndex == 7 || bIndex == 9) && (robotRightEgde > tileRightEdge)){
                 robot.shouldTurn = true;
             }
         } 
