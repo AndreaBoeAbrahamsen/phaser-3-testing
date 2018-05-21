@@ -3,8 +3,8 @@ import GameScene from './GameScene';
 
 var config = {
     type: Phaser.AUTO,
-    width: 400,
-    height: 300,
+    width: 200,
+    height: 144,
     parent: 'test2',
      title: "WrapAround",
     physics: {

@@ -7,7 +7,7 @@ class BootScene extends Phaser.Scene {
 
     preload()
     {
-        this.load.image('background', 'assets/img/background.png');
+        this.load.image('background', 'assets/img/springBackground.png');
         this.load.spritesheet(
             'boy', 
             'assets/img/boy.png',
