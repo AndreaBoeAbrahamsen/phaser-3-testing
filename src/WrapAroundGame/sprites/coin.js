@@ -12,7 +12,12 @@ export default class Coin extends Phaser.GameObjects.Sprite {
     }
 
     update(keys, time, delta) {
-        
+        this.scene.physics.world.overlap(this, this.scene.player, this.coinCollect.bind(this));
+    }
+
+    coinCollect(coin, player) {
+        this.scene.events.emit('collectCoin');
+        this.destroy();
     }
 
     createAnimations() {

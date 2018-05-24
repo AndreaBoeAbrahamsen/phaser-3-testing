@@ -31,22 +31,23 @@ class GameScene extends Phaser.Scene {
 
         this.map.setCollisionByExclusion([1, 2, 3, 11]);
 
+        var playerObject = this.map.getObjectLayer("Objektlag 1").objects.find(
+            (object) => { return object.gid == 15; });
+
+        this.player = new Boy({
+            scene: this,
+            key: 'boy',
+            x: playerObject.x + playerObject.width / 2,
+            y: playerObject.y,
+            input: this.input.keyboard.createCursorKeys()
+        });
+
         this.coins = this.add.group();
-        this.player = null;
 
         this.map.getObjectLayer("Objektlag 1").objects.forEach(
             (object) => {
               let coin;
               switch (object.gid) {
-                case 15:
-                  this.player = new Boy({
-                    scene: this,
-                    key: 'boy',
-                    x: object.x + object.width / 2,
-                    y: object.y,
-                    input: this.input.keyboard.createCursorKeys()
-                  });
-                break;
                 case 16:
                   coin = new Coin({
                     scene: this,
@@ -63,11 +64,35 @@ class GameScene extends Phaser.Scene {
                 this.coins.add(coin);
             }
         );
+
+        this.events.on('collectCoin', this.collectCoin, this);
+
+        this.coinValue = 0;
+        var config = {
+            image: 'retroFont',
+            width: 8,
+            height: 8,
+            chars: "012345acx6789",
+            charsPerRow: 9,
+            spacing: { x: 0, y: 0 }
+        };
+        this.cache.bitmapFont.add('retroFont', Phaser.GameObjects.RetroFont.Parse(this, config));
+        this.dynamicText = this.add.bitmapText(5, 5, 'retroFont', 'cx' + this.coinValue);
     }
 
     update(time, delta)
     {
         this.player.update();
+
+        this.coins.children.entries.forEach(
+            (sprite) => { sprite.update(time, delta); }
+        )
+    }
+
+    collectCoin()
+    {
+        this.coinValue = this.coinValue + 1;
+        this.dynamicText.text = 'cx' + this.coinValue;
     }
 }
 

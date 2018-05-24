@@ -21,11 +21,11 @@ export default class Boy extends Phaser.GameObjects.Sprite {
 
     update(keys, time, delta) {
         if (this.cursors.left.isDown) {
-            this.body.setVelocityX(-160);
+            this.body.setVelocityX(-100);
             this.flipX = true;
         }
         else if (this.cursors.right.isDown){
-            this.body.setVelocityX(160);
+            this.body.setVelocityX(100);
             this.flipX = false;
         }
         else{
