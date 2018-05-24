@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="13" height="9" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="13" height="9" tilewidth="16" tileheight="16" infinite="0" nextobjectid="9">
  <tileset firstgid="1" source="springTiles.tsx"/>
  <tileset firstgid="13" source="../../../../../OneDrive/Documents/Game dev/stuff.tsx"/>
+ <tileset firstgid="15" source="../../../../../OneDrive/Documents/Game dev/boy.tsx"/>
  <layer name="Rutelag 1" width="13" height="9">
   <data encoding="csv">
 11,11,11,11,11,11,11,11,11,11,11,11,11,
@@ -15,4 +16,11 @@
 5,5,5,5,5,5,5,5,5,10,8,12,5
 </data>
  </layer>
+ <objectgroup name="Objektlag 1">
+  <object id="4" name="coin" gid="16" x="48" y="128" width="16" height="16"/>
+  <object id="5" name="coin" gid="16" x="80" y="128" width="16" height="16"/>
+  <object id="6" name="coin" gid="16" x="112" y="128" width="16" height="16"/>
+  <object id="7" name="coin" gid="16" x="160" y="96" width="16" height="16"/>
+  <object id="2" name="boy" gid="15" x="0" y="128" width="32" height="32"/>
+ </objectgroup>
 </map>

@@ -1,4 +1,5 @@
 import Boy from './sprites/boy';
+import Coin from './sprites/coin';
 
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -30,13 +31,38 @@ class GameScene extends Phaser.Scene {
 
         this.map.setCollisionByExclusion([1, 2, 3, 11]);
 
-        this.player = new Boy({
-            scene: this,
-            key: 'boy',
-            x: 50, 
-            y: 50,
-            input: this.input.keyboard.createCursorKeys()
-        });
+        this.coins = this.add.group();
+        this.player = null;
+
+        this.map.getObjectLayer("Objektlag 1").objects.forEach(
+            (object) => {
+              let coin;
+              switch (object.gid) {
+                case 15:
+                  this.player = new Boy({
+                    scene: this,
+                    key: 'boy',
+                    x: object.x + object.width / 2,
+                    y: object.y,
+                    input: this.input.keyboard.createCursorKeys()
+                  });
+                break;
+                case 16:
+                  coin = new Coin({
+                    scene: this,
+                    key: 'coin',
+                    x: object.x + object.width / 2,
+                    y: object.y 
+                  });
+                  break;
+                default:
+                  //console.error("Unknown:", this.tileset.tileProperties[object.gid - 1]);
+                  break;
+              }
+              if(coin)
+                this.coins.add(coin);
+            }
+        );
     }
 
     update(time, delta)

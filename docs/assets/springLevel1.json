@@ -11,8 +11,78 @@
          "width":13,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "name":"Objektlag 1",
+         "objects":[
+                {
+                 "gid":16,
+                 "height":16,
+                 "id":4,
+                 "name":"coin",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":128
+                }, 
+                {
+                 "gid":16,
+                 "height":16,
+                 "id":5,
+                 "name":"coin",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":128
+                }, 
+                {
+                 "gid":16,
+                 "height":16,
+                 "id":6,
+                 "name":"coin",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":112,
+                 "y":128
+                }, 
+                {
+                 "gid":16,
+                 "height":16,
+                 "id":7,
+                 "name":"coin",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":160,
+                 "y":96
+                }, 
+                {
+                 "gid":15,
+                 "height":32,
+                 "id":2,
+                 "name":"boy",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":0,
+                 "y":128
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":1,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.5",
@@ -30,6 +100,10 @@
             "tilecount":12,
             "tileheight":16,
             "tilewidth":16
+        }, 
+        {
+         "firstgid":15,
+         "source":"boy.tsx"
         }],
  "tilewidth":16,
  "type":"map",

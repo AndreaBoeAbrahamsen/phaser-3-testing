@@ -15,6 +15,11 @@ class BootScene extends Phaser.Scene {
             'assets/img/boy.png',
             { frameWidth: 32, frameHeight: 32 }
         );
+        this.load.spritesheet(
+            'coin', 
+            'assets/img/coins.png',
+            { frameWidth: 16, frameHeight: 16 }
+        );
     }
 
     create()
