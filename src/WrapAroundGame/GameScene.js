@@ -12,27 +12,16 @@ class GameScene extends Phaser.Scene {
     {
         this.add.tileSprite(200, 150, 400, 300,'background');
 
-        /*
-        "columns":3,
-        "firstgid":1,
-        "image":"img\/springTiles.png",
-        "imageheight":64,
-        "imagewidth":48,
-        "margin":0,
-        "name":"springTiles",
-        "spacing":0,
-        "tilecount":12,
-        "tileheight":16,
-        "tilewidth":16
-        */
         this.map = this.make.tilemap({ key: 'seasonMap' });
         this.tiles = this.map.addTilesetImage('seasonTiles', 'seasonTiles');
         this.layer = this.map.createStaticLayer('ground', this.tiles, 0, 0);
 
+        this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+
         this.map.setCollisionByExclusion([1, 2, 3, 38]);
 
         var playerObject = this.map.getObjectLayer("people").objects.find(
-            (object) => { return object.gid == 73; });
+            (object) => { return object.gid == 145; });
 
         this.player = new Boy({
             scene: this,
@@ -42,13 +31,16 @@ class GameScene extends Phaser.Scene {
             input: this.input.keyboard.createCursorKeys()
         });
 
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.cameras.main.startFollow(this.player);
+
         this.coins = this.add.group();
 
         this.map.getObjectLayer("coins").objects.forEach(
             (object) => {
               let coin;
               switch (object.gid) {
-                case 74:
+                case 146:
                   coin = new Coin({
                     scene: this,
                     key: 'coin',
@@ -78,6 +70,7 @@ class GameScene extends Phaser.Scene {
         };
         this.cache.bitmapFont.add('retroFont', Phaser.GameObjects.RetroFont.Parse(this, config));
         this.dynamicText = this.add.bitmapText(5, 5, 'retroFont', 'cx' + this.coinValue);
+        this.dynamicText.setScrollFactor(0);
     }
 
     update(time, delta)
