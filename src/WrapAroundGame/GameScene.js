@@ -25,14 +25,14 @@ class GameScene extends Phaser.Scene {
         "tileheight":16,
         "tilewidth":16
         */
-        this.map = this.make.tilemap({ key: 'map' });
-        this.tiles = this.map.addTilesetImage('springTiles', 'springTiles');
-        this.layer = this.map.createStaticLayer('Rutelag 1', this.tiles, 0, 0);
+        this.map = this.make.tilemap({ key: 'seasonMap' });
+        this.tiles = this.map.addTilesetImage('seasonTiles', 'seasonTiles');
+        this.layer = this.map.createStaticLayer('ground', this.tiles, 0, 0);
 
-        this.map.setCollisionByExclusion([1, 2, 3, 11]);
+        this.map.setCollisionByExclusion([1, 2, 3, 38]);
 
-        var playerObject = this.map.getObjectLayer("Objektlag 1").objects.find(
-            (object) => { return object.gid == 15; });
+        var playerObject = this.map.getObjectLayer("people").objects.find(
+            (object) => { return object.gid == 73; });
 
         this.player = new Boy({
             scene: this,
@@ -44,11 +44,11 @@ class GameScene extends Phaser.Scene {
 
         this.coins = this.add.group();
 
-        this.map.getObjectLayer("Objektlag 1").objects.forEach(
+        this.map.getObjectLayer("coins").objects.forEach(
             (object) => {
               let coin;
               switch (object.gid) {
-                case 16:
+                case 74:
                   coin = new Coin({
                     scene: this,
                     key: 'coin',
