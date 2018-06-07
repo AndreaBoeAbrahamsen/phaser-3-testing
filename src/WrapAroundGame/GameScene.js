@@ -13,15 +13,15 @@ class GameScene extends Phaser.Scene {
         this.add.tileSprite(200, 150, 400, 300,'background');
 
         this.map = this.make.tilemap({ key: 'seasonMap' });
-        this.tiles = this.map.addTilesetImage('seasonTiles', 'seasonTiles');
-        this.layer = this.map.createStaticLayer('ground', this.tiles, 0, 0);
+        this.tiles = this.map.addTilesetImage('seasonTiles2', 'seasonTiles');
+        this.layer = this.map.createDynamicLayer('ground', this.tiles, 0, 0);
 
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-        this.map.setCollisionByExclusion([1, 2, 3, 38]);
+        this.map.setCollisionByExclusion([1, 2, 3, 81]);
 
         var playerObject = this.map.getObjectLayer("people").objects.find(
-            (object) => { return object.gid == 145; });
+            (object) => { return object.gid == 157; });
 
         this.player = new Boy({
             scene: this,
@@ -31,7 +31,8 @@ class GameScene extends Phaser.Scene {
             input: this.input.keyboard.createCursorKeys()
         });
 
-        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        //this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.cameras.main.setBounds(0, 0, this.layer.width * this.layer.scaleX, this.layer.height * this.layer.scaleY);
         this.cameras.main.startFollow(this.player);
 
         this.coins = this.add.group();
@@ -40,7 +41,7 @@ class GameScene extends Phaser.Scene {
             (object) => {
               let coin;
               switch (object.gid) {
-                case 146:
+                case 158:
                   coin = new Coin({
                     scene: this,
                     key: 'coin',
