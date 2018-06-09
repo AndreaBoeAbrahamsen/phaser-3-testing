@@ -21,8 +21,8 @@ class BootScene extends Phaser.Scene {
             'assets/img/coins.png',
             { frameWidth: 16, frameHeight: 16 }
         );
-        this.load.tilemapTiledJSON('seasonMap', 'assets/seasonLevel07.json');
-        this.load.image('seasonTiles', 'assets/img/seasonTiles2.png');
+        this.load.tilemapTiledJSON('seasonMap', 'assets/seasonLevel08.json');
+        this.load.image('seasonTiles', 'assets/img/seasonTilesExtended.png');
     }
 
     create()

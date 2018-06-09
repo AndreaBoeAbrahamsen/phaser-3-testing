@@ -10,18 +10,18 @@ class GameScene extends Phaser.Scene {
 
     create()
     {
-        this.add.tileSprite(200, 150, 400, 300,'background');
+        this.add.tileSprite(160/2, 144/2, 160*4, 144,'background');
 
         this.map = this.make.tilemap({ key: 'seasonMap' });
-        this.tiles = this.map.addTilesetImage('seasonTiles2', 'seasonTiles');
+        this.tiles = this.map.addTilesetImage('seasonTilesExtended', 'seasonTiles');
         this.layer = this.map.createDynamicLayer('ground', this.tiles, 0, 0);
 
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-        this.map.setCollisionByExclusion([1, 2, 3, 81]);
+        this.map.setCollisionByExclusion([1, 2, 3, 38]);
 
         var playerObject = this.map.getObjectLayer("people").objects.find(
-            (object) => { return object.gid == 157; });
+            (object) => { return object.gid == 84; });
 
         this.player = new Boy({
             scene: this,
@@ -33,7 +33,7 @@ class GameScene extends Phaser.Scene {
 
         //this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.setBounds(0, 0, this.layer.width * this.layer.scaleX, this.layer.height * this.layer.scaleY);
-        this.cameras.main.startFollow(this.player);
+        this.cameras.main.startFollow(this.player, true);
 
         this.coins = this.add.group();
 
@@ -41,7 +41,7 @@ class GameScene extends Phaser.Scene {
             (object) => {
               let coin;
               switch (object.gid) {
-                case 158:
+                case 75:
                   coin = new Coin({
                     scene: this,
                     key: 'coin',
