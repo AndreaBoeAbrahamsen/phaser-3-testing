@@ -23,6 +23,15 @@ class BootScene extends Phaser.Scene {
         );
         this.load.tilemapTiledJSON('seasonMap', 'assets/seasonLevel08.json');
         this.load.image('seasonTiles', 'assets/img/seasonTilesExtended.png');
+        
+        //this.load.image('door', 'assets/img/wood-door-sheet.png');
+        this.load.spritesheet(
+            'door', 
+            'assets/img/wood-door-sheet.png',
+            { frameWidth: 28, frameHeight: 34 }
+        );
+
+        this.load.image('key', 'assets/img/door-key.png');
     }
 
     create()

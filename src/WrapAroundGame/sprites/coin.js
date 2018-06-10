@@ -3,7 +3,9 @@ export default class Coin extends Phaser.GameObjects.Sprite {
         super(config.scene, config.x, config.y, config.key);
         config.scene.physics.world.enable(this);
         config.scene.add.existing(this);
-        this.body.setGravityY(300);
+        //this.body.setGravityY(300);
+        //this.body.immovable = true;
+        this.body.allowGravity = false;
       
         this.createAnimations();
         this.play('spin', true);
