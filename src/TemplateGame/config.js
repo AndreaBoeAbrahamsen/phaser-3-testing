@@ -1,12 +1,16 @@
 import BootScene from './BootScene';
+//import TitleScene from './TitleScene';
 import GameScene from './GameScene';
+
+const width = 800;
+const height = 608;
 
 var config = {
     type: Phaser.AUTO,
-    width: 200,
-    height: 144,
-    parent: 'WrapAround',
-    title: "WrapAround",
+    width: width,
+    height: height,
+    parent: 'elementId',
+    title: "GameTitle",
     physics: {
       default: 'arcade',
       arcade: {
@@ -16,6 +20,7 @@ var config = {
     },
     scene: [
       BootScene, 
+      TitleScene,
       GameScene
     ],
     pixelArt: true
