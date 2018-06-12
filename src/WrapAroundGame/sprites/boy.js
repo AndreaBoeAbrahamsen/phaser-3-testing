@@ -12,7 +12,8 @@ export default class Boy extends Phaser.GameObjects.Sprite {
       
         this.createAnimations();
 
-        this.cursors = config.input;
+        this.cursors = config.input.keyboard.createCursorKeys();
+        this.bKey = config.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
 
         this.scene.physics.add.collider(this, config.scene.layer);
 
@@ -21,18 +22,26 @@ export default class Boy extends Phaser.GameObjects.Sprite {
 
     update(keys, time, delta) {
         if (this.cursors.left.isDown) {
-            this.body.setVelocityX(-100);
+            if (this.bKey.isDown) {
+                this.body.setVelocityX(-135);     
+            } else {
+                this.body.setVelocityX(-100);
+            }
             this.flipX = true;
         }
         else if (this.cursors.right.isDown){
-            this.body.setVelocityX(100);
+            if (this.bKey.isDown){
+                this.body.setVelocityX(135);
+            } else {
+                this.body.setVelocityX(100);
+            }
             this.flipX = false;
         }
         else{
             this.body.setVelocityX(0); 
         }
 
-        if (this.cursors.up.isDown && this.body.onFloor()){
+        if (this.cursors.space.isDown && this.body.onFloor()){
             this.body.setVelocityY(-230);
         }
 
@@ -50,7 +59,11 @@ export default class Boy extends Phaser.GameObjects.Sprite {
             name = 'down';
         }
         else if (this.body.velocity.x !== 0 && this.body.onFloor()) {
-            name = 'walk';
+            if (Math.abs(this.body.velocity.x) > 110) {
+                name = 'run';
+            } else {
+                name = 'walk';
+            }
         }
     
         return name;
@@ -61,6 +74,13 @@ export default class Boy extends Phaser.GameObjects.Sprite {
             key: 'walk',
             frames: this.scene.anims.generateFrameNumbers('boy', { start: 10, end: 15 }),
             frameRate: 10,
+            repeat: -1
+        });
+
+        this.scene.anims.create({
+            key: 'run',
+            frames: this.scene.anims.generateFrameNumbers('boy', { start: 20, end: 27 }),
+            frameRate: 15,
             repeat: -1
         });
 

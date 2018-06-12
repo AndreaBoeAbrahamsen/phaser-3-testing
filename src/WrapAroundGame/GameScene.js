@@ -30,7 +30,7 @@ class GameScene extends Phaser.Scene {
             key: 'boy',
             x: playerObject.x + playerObject.width / 2,
             y: playerObject.y,
-            input: this.input.keyboard.createCursorKeys()
+            input: this.input
         });
 
         //this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
