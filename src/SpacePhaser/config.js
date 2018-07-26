@@ -7,26 +7,36 @@ import EnemyScene from './EnemyScene';
 const width = 800;
 const height = 608;
 
-var config = {
-  type: Phaser.AUTO,
-  width: width,
-  height: height,
-  parent: 'MyGameTests',
-   title: "MyGameTests",
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 200 }
-    }
+export default {
+  game: null,
+  createGame: function(){
+    var config = {
+      type: Phaser.AUTO,
+      width: width,
+      height: height,
+      parent: 'MyGameTests',
+       title: "MyGameTests",
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: { y: 200 }
+        }
+      },
+      scene: [
+        BootScene, 
+        TitleScene,
+        PresentationScene,
+        ObjectScene,
+        EnemyScene
+      ],
+      pixelArt: true,
+      antialias: false
+    };
+    
+    this.game = new Phaser.Game(config);
   },
-  scene: [
-    BootScene, 
-    TitleScene,
-    PresentationScene,
-    ObjectScene,
-    EnemyScene
-  ],
-  pixelArt: true
+  destroyGame: function(){
+    this.game.destroy(true);
+  }
 };
 
-const game = new Phaser.Game(config);

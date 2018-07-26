@@ -1,5 +1,7 @@
 import Boy from './sprites/boy';
 import Coin from './sprites/coin';
+import Door from './sprites/door';
+import Key from './sprites/key';
 
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -10,7 +12,7 @@ class GameScene extends Phaser.Scene {
 
     create()
     {
-        this.add.tileSprite(160/2, 144/2, 160*4, 144,'background');
+        this.createBackground();
 
         this.map = this.make.tilemap({ key: 'seasonMap' });
         this.tiles = this.map.addTilesetImage('seasonTilesExtended', 'seasonTiles');
@@ -35,7 +37,8 @@ class GameScene extends Phaser.Scene {
 
         //this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.setBounds(0, 0, this.layer.width * this.layer.scaleX, this.layer.height * this.layer.scaleY);
-        this.cameras.main.startFollow(this.player, true);
+        this.cameras.main.startFollow(this.player); //true
+        //this.cameras.main.setRoundPixels(true);
 
         this.createCoins();
         
@@ -55,16 +58,46 @@ class GameScene extends Phaser.Scene {
 
     update(time, delta)
     {
-        this.player.update();
+        this.player.updateFsm();
 
         this.coins.children.entries.forEach(
             (sprite) => { sprite.update(time, delta); }
         )
+
+        this.key.update();
+    }
+
+    createBackground()
+    {
+        this.background = this.add.tileSprite(200*0.5, 144*0.5, 160*4, 144,'background');
+        //this.add.image(200*0.5, 144*0.5, 'background');
+        //this.background.setInteractive({ pixelPerfect: true });
+        //this.background.setScrollFactor(0);
+
+        /*this.sky = this.add.tileSprite(160/2, 144/2, 160*4, 144,'sky');
+        this.sky.setScrollFactor(0);
+
+        this.forest = this.add.tileSprite(160/2, 144/2, 160*4, 144,'forest');
+        this.forest.setScrollFactor(0);*/
     }
 
     createCoins()
     {
         this.coins = this.add.group();
+
+        this.anims.create({
+            key: 'spin',
+            frames: this.anims.generateFrameNumbers('coin', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'glitter',
+            frames: this.anims.generateFrameNumbers('coin', { start: 4, end: 7 }),
+            frameRate: 20,
+            repeat: 0
+        });
 
         this.map.getObjectLayer("coins").objects.forEach(
             (object) => {
@@ -101,42 +134,22 @@ class GameScene extends Phaser.Scene {
         var doorObject = this.map.getObjectLayer("other").objects.find(
             (object) => { return object.gid == 88; });
 
-        this.door = this.physics.add.sprite(
-            doorObject.x + doorObject.width / 2, 
-            doorObject.y - doorObject.height / 2, 
-            'door'
-        );
-
-        this.door.body.allowGravity = false;
-
-        this.anims.create({
-            key: 'open',
-            frames: this.anims.generateFrameNumbers('door', { start: 0, end: 1 }),
-            frameRate: 10,
-            repeat: 0
+        this.door = new Door({
+            scene: this,
+            x: doorObject.x + doorObject.width / 2, 
+            y: doorObject.y - doorObject.height / 2, 
+            key: 'door'
         });
-
-        this.physics.add.collider(this.door, this.layer);
 
 
         var keyObject = this.map.getObjectLayer("other").objects.find(
             (object) => { return object.gid == 76; });
 
-        this.key = this.physics.add.sprite(
-            keyObject.x + keyObject.width / 2, 
-            keyObject.y - keyObject.height / 2, 
-            'key'
-        );
-
-        this.key.body.allowGravity = false;
-
-        var tween = this.tweens.add({
-            targets: this.key,
-            y: '+=3',
-            //ease: 'Bounce.easeIn',
-            duration: 800,
-            yoyo: true,
-            repeat: -1
+        this.key = new Key({
+            scene: this,
+            x: keyObject.x + keyObject.width / 2, 
+            y: keyObject.y - keyObject.height / 2, 
+            key: 'key'
         });
     }
 }

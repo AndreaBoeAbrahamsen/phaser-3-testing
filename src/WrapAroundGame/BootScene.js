@@ -32,6 +32,9 @@ class BootScene extends Phaser.Scene {
         );
 
         this.load.image('key', 'assets/img/door-key.png');
+
+        this.load.image('sky', 'assets/img/springSky.png');
+        this.load.image('forest', 'assets/img/springForest.png');
     }
 
     create()

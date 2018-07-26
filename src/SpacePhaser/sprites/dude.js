@@ -12,7 +12,7 @@ export default class Dude extends Phaser.GameObjects.Sprite {
       
         this.createAnimations();
 
-        this.cursors = config.input;
+        this.cursors = config.input.keyboard.createCursorKeys();
         this.scene.physics.add.collider(this, config.scene.layer);
     }
 

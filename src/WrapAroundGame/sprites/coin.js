@@ -33,7 +33,7 @@ export default class Coin extends Phaser.GameObjects.Sprite {
     }
 
     createAnimations() {
-        this.scene.anims.create({
+        /*this.scene.anims.create({
             key: 'spin',
             frames: this.scene.anims.generateFrameNumbers('coin', { start: 0, end: 3 }),
             frameRate: 10,
@@ -45,6 +45,6 @@ export default class Coin extends Phaser.GameObjects.Sprite {
             frames: this.scene.anims.generateFrameNumbers('coin', { start: 4, end: 7 }),
             frameRate: 20,
             repeat: 0
-        });
+        });*/
     }
 }

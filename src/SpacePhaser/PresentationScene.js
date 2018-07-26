@@ -29,7 +29,7 @@ class PresentationScene extends Phaser.Scene {
             key: 'dude',
             x: 100, //16 * 6, 3500, 
             y: 450, //this.sys.game.config.height - 48 - 48
-            input: this.input.keyboard.createCursorKeys()
+            input: this.input
         });
 
         this.score = 0;
