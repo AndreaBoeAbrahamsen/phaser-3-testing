@@ -30,25 +30,33 @@ export default class Boy extends Phaser.GameObjects.Sprite {
             scene: this.scene,
             entity: this
         });
+
+        this.velocities = {
+            walking: 100,
+            running: 135,
+            turning: 30,
+            jump: 230,
+            landing: 40,
+        };
     }
 
     updateFsm() {
-        const { behaviors } = this;
+        const { behaviors, velocities } = this;
         const onFloor = this.body.onFloor();
 
         if (this.cursors.left.isDown) {
             if (this.bKey.isDown) {
-                behaviors.handle('run', {velocity: -135});   
+                behaviors.handle('run', {velocity: -velocities.running});   
             } else {
-                behaviors.handle('walk', {velocity: -100});  
+                behaviors.handle('walk', {velocity: -velocities.walking});  
             }
             this.flipX = true;
         }
         else if (this.cursors.right.isDown){
             if (this.bKey.isDown){
-                behaviors.handle('run', {velocity: 135});  
+                behaviors.handle('run', {velocity: velocities.running});  
             } else {
-                behaviors.handle('walk', {velocity: 100});  
+                behaviors.handle('walk', {velocity: velocities.walking});  
             }
             this.flipX = false;
         }
@@ -57,7 +65,7 @@ export default class Boy extends Phaser.GameObjects.Sprite {
         }
 
         if (this.cursors.space.isDown && onFloor){
-            behaviors.handle('jump', {velocity: -230});  
+            behaviors.handle('jump', {velocity: -velocities.jump});  
         }
 
         if (this.isFalling && onFloor){

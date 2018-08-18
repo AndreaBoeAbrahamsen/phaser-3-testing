@@ -2,39 +2,25 @@ import 'phaser';
 
 import SpacePhaser from './SpacePhaser/config';
 import WrapAroundGame from './WrapAroundGame/config';
+import SnowyMountain from './SnowyMountain/config';
 
-var gameName = 'WrapAroundGame';
+var currentGame = SnowyMountain.createGame();
 
-if(gameName == 'WrapAroundGame'){
-    WrapAroundGame.createGame();
-} else {
-    SpacePhaser.createGame();
+document.getElementById("SpacePhaserButton").addEventListener("click", addGame.bind(null, SpacePhaser));
+document.getElementById("WrapAroundButton").addEventListener("click", addGame.bind(null, WrapAroundGame));
+document.getElementById("SnoweyButton").addEventListener("click", addGame.bind(null, SnowyMountain));
+
+function addGame(game){
+    removeGame();
+    currentGame = game;
+    currentGame.createGame();
 }
 
-document.getElementById("WrapAroundButton").addEventListener("click", function(){
-    removeGames();
-    WrapAroundGame.createGame();
-});
-
-document.getElementById("SpacePhaserButton").addEventListener("click", function(){
-    removeGames();
-    SpacePhaser.createGame();
-});
-
-function removeGames(){
-    if(SpacePhaser.game != null){
-        SpacePhaser.destroyGame();
-        var elements = document.getElementById("MyGameTests")
-        if(elements.childNodes.length > 0){
-            elements.removeChild(elements.childNodes[0]);
-        }
-    }
-    if(WrapAroundGame.game != null){
-        WrapAroundGame.destroyGame();
-        var elements = document.getElementById("WrapAround")
-        if(elements.childNodes.length > 0){
-            elements.removeChild(elements.childNodes[0]);
-        }
+function removeGame(){
+    currentGame.destroyGame();
+    var elements = document.getElementById(currentGame.game.config.parent);
+    if(elements.childNodes.length > 0){
+        elements.removeChild(elements.childNodes[0]);
     }
 }
 

@@ -34,6 +34,7 @@ export default {
     };
     
     this.game = new Phaser.Game(config);
+    return this;
   },
   destroyGame: function(){
     this.game.destroy(true);
