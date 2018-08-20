@@ -8,10 +8,10 @@ export default class Player {
 
     this.sprite = scene.physics.add
         .sprite(x, y, "people")
-        .setSize(14, 14)
-        .setOffset(2, 2);
+        .setSize(11, 6)
+        .setOffset(3, 10);
     
-    const { LEFT, RIGHT, UP,DOWN } = Phaser.Input.Keyboard.KeyCodes;
+    const { LEFT, RIGHT, UP, DOWN } = Phaser.Input.Keyboard.KeyCodes;
     this.keys = scene.input.keyboard.addKeys({
       left: LEFT,
       right: RIGHT,

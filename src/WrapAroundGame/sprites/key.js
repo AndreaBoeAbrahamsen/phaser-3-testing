@@ -13,12 +13,12 @@ export default class Door extends Phaser.GameObjects.Sprite {
 
     update(keys, time, delta) {
         if(this.touchable){
-            this.scene.physics.world.overlap(this, this.scene.player, this.tiuch); 
+            this.scene.physics.world.overlap(this, this.scene.player.sprite, this.tiuch); 
         } 
     }
 
     tiuch(){
-        console.log("tutch");
+        console.log("touch");
     }
 
     createTween() {

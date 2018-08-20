@@ -9,7 +9,8 @@ export default class Behaviors extends machina.Fsm {
             states: {
                 idling: {
                     _onEnter: function() {
-                        entity.body.setVelocityX(0); 
+                        entity.sprite.body.setVelocityX(0); 
+                        entity.sprite.body.setAccelerationX(0);
                         entity.sequence('idle');
                     },
                     walk: 'walking',
@@ -21,8 +22,14 @@ export default class Behaviors extends machina.Fsm {
                         entity.sequence('walk');
                     },
                     walk: function(data) {
-                        const { velocity } = data;
-                        entity.body.setVelocityX(velocity); 
+                        const { velocity, direction } = data;
+                        let speed = velocity.walking;
+                        speed = direction === 'left' ? -speed : speed;
+                        entity.sprite.body.setVelocityX(speed); 
+                        if(entity.direction != direction){
+                            entity.direction = direction;
+                            this.transition('turning', 'walk');
+                        }
                     },
                     idle: 'idling',
                     run: 'running',
@@ -34,33 +41,53 @@ export default class Behaviors extends machina.Fsm {
                         entity.sequence('run');
                     },
                     run: function (data){
-                        const { velocity } = data;
-                        entity.body.setVelocityX(velocity);
+                        const { velocity, direction } = data;
+                        let speed = velocity.running;
+                        speed = direction === 'left' ? -speed : speed;
+                        entity.sprite.body.setAccelerationX(speed);
+                        if(entity.direction != direction){
+                            entity.direction = direction;
+                            this.transition('turning', 'running');
+                        }
                     },
                     walk: 'walking',
                     idle: 'idling',
                     jump: 'jumping',
                     fall: 'falling'
                 },
-                turning: {},
+                turning: {
+                    _onEnter: function(c) {
+                        console.log(c);
+                        entity.sprite.body.setVelocityX(0); 
+                        entity.sprite.body.setAccelerationX(0);
+                        entity.sequence('turn').then(() => {
+                            entity.sprite.setFlipX(entity.direction === 'left');
+                            this.transition('idling');
+                        });
+                    }
+                },
                 jumping: {
                     _onEnter: function() {
                         entity.sequence('jump');
                     },
                     jump: function(data) {
                         const { velocity } = data;
-                        entity.body.setVelocityY(velocity); 
+                        entity.sprite.body.setVelocityY(-velocity.jump); 
                     },
                     walk: function(data) {
-                        const { velocity } = data;
-                        entity.body.setVelocityX(velocity); 
+                        const { velocity, direction } = data;
+                        let speed = velocity.airSpeed;
+                        speed = direction === 'left' ? -speed : speed;
+                        entity.sprite.body.setAccelerationX(speed); 
                     },
                     run: function(data) {
-                        const { velocity } = data;
-                        entity.body.setVelocityX(velocity); 
+                        const { velocity, direction } = data;
+                        let speed = velocity.airSpeed;
+                        speed = direction === 'left' ? -speed : speed;
+                        entity.sprite.body.setAccelerationX(speed); 
                     },
                     idle: function() {
-                        entity.body.setVelocityX(0); 
+                        entity.sprite.body.setAccelerationX(0); 
                     },
                     fall: 'falling'
                 },
@@ -70,21 +97,26 @@ export default class Behaviors extends machina.Fsm {
                     },
                     fall: function() {},
                     walk: function(data) {
-                        const { velocity } = data;
-                        entity.body.setVelocityX(velocity); 
+                        const { velocity, direction } = data;
+                        let speed = velocity.airSpeed;
+                        speed = direction === 'left' ? -speed : speed;
+                        entity.sprite.body.setAccelerationX(speed); 
                     },
                     run: function(data) {
-                        const { velocity } = data;
-                        entity.body.setVelocityX(velocity); 
+                        const { velocity, direction } = data;
+                        let speed = velocity.airSpeed;
+                        speed = direction === 'left' ? -speed : speed;
+                        entity.sprite.body.setAccelerationX(speed); 
                     },
                     idle: function() {
-                        entity.body.setVelocityX(0); 
+                        entity.sprite.body.setAccelerationX(0); 
                     },
                     land: 'landing'
                 },
                 landing: {
                     _onEnter: function() {
-                        entity.body.setVelocityX(0); 
+                        entity.sprite.body.setVelocityX(0);
+                        entity.sprite.body.setAccelerationX(0); 
                         entity.sequence('land').then(() => {
                             this.transition('idling');
                         });

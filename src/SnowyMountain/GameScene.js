@@ -22,9 +22,7 @@ class GameScene extends Phaser.Scene {
       this.aboveLayer.setDepth(10);
 
       this.spawnPoint = this.map.findObject("Objects", obj => obj.name === "Spawn Point");
-
       this.player = new Person(this, this.spawnPoint.x, this.spawnPoint.y)
-
 
       this.physics.add.collider(this.player.sprite, this.worldLayer);
 

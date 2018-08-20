@@ -1,24 +1,23 @@
 import Behaviors from './behaviors';
 import Animations from './animations';
 
-export default class Boy extends Phaser.GameObjects.Sprite {
+export default class Boy {
     constructor(config) {
-        super(config.scene, config.x, config.y, config.key);
-        config.scene.physics.world.enable(this);
-        config.scene.add.existing(this);
-        //this.body.setBounce(0.2);
-        this.body.setCollideWorldBounds(true);
-        this.body.setGravityY(300);
+        this.scene = config.scene;
 
-        this.body.setSize(18, 25);
-        this.body.offset.set(7, 6);  
-
-        this.cursors = config.input.keyboard.createCursorKeys();
-        this.bKey = config.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
-
-        this.scene.physics.add.collider(this, config.scene.layer);
+        this.sprite = this.scene.physics.add
+            .sprite(config.x, config.y, config.key)
+            .setCollideWorldBounds(true)
+            .setGravityY(300)
+            //.setBounce(0.2)
+            .setSize(18, 25)
+            .setOffset(7, 6)
+            .setDrag(1000, 0)
+            .setMaxVelocity(150, 200);
+        this.scene.physics.add.collider(this.sprite, config.scene.layer);
 
         this.isFalling = false;
+        this.direction = 'right';
 
         this.animations = new Animations({
             scene: this.scene,
@@ -35,37 +34,45 @@ export default class Boy extends Phaser.GameObjects.Sprite {
             walking: 100,
             running: 135,
             turning: 30,
-            jump: 230,
+            jump: 200,
+            airSpeed: 90,
             landing: 40,
         };
+
+        const { LEFT, RIGHT, SPACE, B } = Phaser.Input.Keyboard.KeyCodes;
+        this.keys = this.scene.input.keyboard.addKeys({
+          left: LEFT,
+          right: RIGHT,
+          space: SPACE,
+          b: B
+        });
+    
     }
 
-    updateFsm() {
-        const { behaviors, velocities } = this;
-        const onFloor = this.body.onFloor();
+    update() {
+        const { keys, sprite, behaviors, velocities } = this;
+        const onFloor = sprite.body.onFloor();
 
-        if (this.cursors.left.isDown) {
-            if (this.bKey.isDown) {
-                behaviors.handle('run', {velocity: -velocities.running});   
+        if (keys.left.isDown) {
+            if (keys.b.isDown) {
+                behaviors.handle('run', {velocity: velocities,  direction: 'left'});   
             } else {
-                behaviors.handle('walk', {velocity: -velocities.walking});  
+                behaviors.handle('walk', {velocity: velocities,  direction: 'left'});  
             }
-            this.flipX = true;
         }
-        else if (this.cursors.right.isDown){
-            if (this.bKey.isDown){
-                behaviors.handle('run', {velocity: velocities.running});  
+        else if (keys.right.isDown){
+            if (keys.b.isDown){
+                behaviors.handle('run', {velocity: velocities, direction: 'right'});  
             } else {
-                behaviors.handle('walk', {velocity: velocities.walking});  
+                behaviors.handle('walk', {velocity: velocities, direction: 'right'});  
             }
-            this.flipX = false;
         }
         else{
             behaviors.handle('idle'); 
         }
 
-        if (this.cursors.space.isDown && onFloor){
-            behaviors.handle('jump', {velocity: -velocities.jump});  
+        if (keys.space.isDown && onFloor){
+            behaviors.handle('jump', {velocity: velocities});  
         }
 
         if (this.isFalling && onFloor){
@@ -73,7 +80,7 @@ export default class Boy extends Phaser.GameObjects.Sprite {
             this.isFalling = false; 
         }
 
-        if (this.body.velocity.y >= 0 && !onFloor){
+        if (sprite.body.velocity.y >= 0 && !onFloor){
             behaviors.handle('fall'); 
             this.isFalling = true; 
         }

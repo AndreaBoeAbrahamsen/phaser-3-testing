@@ -4,7 +4,7 @@ import SpacePhaser from './SpacePhaser/config';
 import WrapAroundGame from './WrapAroundGame/config';
 import SnowyMountain from './SnowyMountain/config';
 
-var currentGame = SnowyMountain.createGame();
+var currentGame = WrapAroundGame.createGame();
 
 document.getElementById("SpacePhaserButton").addEventListener("click", addGame.bind(null, SpacePhaser));
 document.getElementById("WrapAroundButton").addEventListener("click", addGame.bind(null, WrapAroundGame));

@@ -7,13 +7,13 @@ export default class Animations {
 
     sequence(name) {
         return new Promise((resolve, reject) => {
-          this.anims.play(name, true);
-          this.on(
+          this.sprite.anims.play(name, true);
+          this.sprite.on(
             'animationcomplete',
             (animation, frame) => {
               resolve(name);
             },
-            this
+            this.sprite
           );
         });
     }

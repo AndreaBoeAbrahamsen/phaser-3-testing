@@ -37,7 +37,7 @@ class GameScene extends Phaser.Scene {
 
         //this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.setBounds(0, 0, this.layer.width * this.layer.scaleX, this.layer.height * this.layer.scaleY);
-        this.cameras.main.startFollow(this.player); //true
+        this.cameras.main.startFollow(this.player.sprite); //true
         //this.cameras.main.setRoundPixels(true);
 
         this.createCoins();
@@ -58,7 +58,7 @@ class GameScene extends Phaser.Scene {
 
     update(time, delta)
     {
-        this.player.updateFsm();
+        this.player.update();
 
         this.coins.children.entries.forEach(
             (sprite) => { sprite.update(time, delta); }
